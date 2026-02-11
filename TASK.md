@@ -4,6 +4,10 @@
 
 Create a RESTful API using Django REST Framework for managing ride information.
 
+## Progress
+
+Phase 1 complete: Dockerized local environment, health endpoint, and API docs are available. See `README.md` and `TEST.md`.
+
 ---
 
 ## Core Requirements

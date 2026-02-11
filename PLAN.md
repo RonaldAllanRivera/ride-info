@@ -1,6 +1,6 @@
 # Plan
 
-## Phase 1 — Foundation (repo, runtime, docs)
+## Phase 1 — Foundation (repo, runtime, docs) — Completed
 - Define the tech stack and project layout.
 - Docker-first local environment for Ubuntu (Docker Desktop): Django API + Postgres.
 - Add baseline repo hygiene:

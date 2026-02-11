@@ -17,10 +17,17 @@ REST API for managing ride information.
 ### 2) Environment
 Create a local `.env` file (see `.env.example`).
 
+Notes:
+- `.env` is intended to be local-only.
+
 ### 3) Start services
 ```bash
 docker compose up --build
 ```
+
+Smoke check:
+- `GET http://localhost:8000/api/health/`
+- `GET http://localhost:8000/api/docs/`
 
 ### 4) Migrations and admin user
 Once containers are running:
@@ -59,3 +66,7 @@ Implementation notes:
 ## Bonus: Raw SQL
 
 A raw SQL statement that counts trips that took more than 1 hour (pickup -> dropoff), grouped by month and driver, will be included here after the schema is implemented.
+
+## Testing
+
+See `TEST.md` for step-by-step Docker and Postman testing.
