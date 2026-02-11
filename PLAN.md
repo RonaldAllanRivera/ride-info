@@ -15,6 +15,8 @@
   - Prefer JWT (stateless, works well with APIs) or TokenAuth.
 - Add basic admin and management commands to create an initial admin user.
 
+Status: Completed.
+
 ## Phase 3 — Ride List API (correctness + performance)
 - Implement CRUD endpoints via DRF viewsets.
 - Implement Ride List API:

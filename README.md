@@ -45,6 +45,10 @@ docker compose exec web python manage.py createsuperuser
 ### Authentication rule
 Only users with role `admin` can access the API.
 
+Token endpoints:
+- `POST /api/auth/token/` (admin only)
+- `POST /api/auth/token/refresh/`
+
 ### Ride List endpoint requirements
 The ride list endpoint supports:
 - Pagination

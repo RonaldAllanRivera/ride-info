@@ -23,6 +23,14 @@ In a second terminal:
 docker compose exec web python manage.py migrate
 ```
 
+If you are switching to the custom user model for the first time:
+```bash
+docker compose down -v
+docker compose up --build
+docker compose exec web python manage.py makemigrations
+docker compose exec web python manage.py migrate
+```
+
 ## 3) Smoke tests (no authentication required yet)
 
 ### Health endpoint
@@ -41,6 +49,41 @@ Expected:
 Open in browser:
 - Swagger UI: `http://localhost:8000/api/docs/`
 - OpenAPI schema: `http://localhost:8000/api/schema/`
+
+## 4) Authentication tests (admin-only)
+
+Create an admin user:
+```bash
+docker compose exec web python manage.py createsuperuser
+```
+
+### Obtain JWT token (admin only)
+In Postman:
+- Method: `POST`
+- URL: `http://localhost:8000/api/auth/token/`
+- Body: `raw` -> `JSON`
+
+```json
+{
+  "email": "your-admin-email@example.com",
+  "password": "yourpassword"
+}
+```
+
+Expected:
+- Status: `200 OK`
+- JSON contains `access` and `refresh`
+
+If the password is incorrect:
+- Status: `401 Unauthorized`
+
+Notes:
+- The trailing slash matters (`/api/auth/token/`).
+
+### Call an admin-only endpoint
+- Method: `GET`
+- URL: `http://localhost:8000/api/users/`
+- Header: `Authorization: Bearer <access>`
 
 ## 4) Troubleshooting
 
