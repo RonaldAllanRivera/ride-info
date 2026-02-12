@@ -85,6 +85,46 @@ Notes:
 - URL: `http://localhost:8000/api/users/`
 - Header: `Authorization: Bearer <access>`
 
+### Ride list (filters + sorting)
+
+List rides (default ordering):
+- Method: `GET`
+- URL: `http://localhost:8000/api/rides/`
+
+Filter by status:
+- `GET http://localhost:8000/api/rides/?status=pickup`
+
+Filter by rider email:
+- `GET http://localhost:8000/api/rides/?rider_email=rider1@example.com`
+
+Sort by pickup time:
+- `GET http://localhost:8000/api/rides/?ordering=pickup_time`
+- `GET http://localhost:8000/api/rides/?ordering=-pickup_time`
+
+Sort by distance to pickup (requires GPS input):
+- `GET http://localhost:8000/api/rides/?ordering=distance&lat=14.5995&lon=120.9842`
+- `GET http://localhost:8000/api/rides/?ordering=-distance&lat=14.5995&lon=120.9842`
+
+## 5) Seed sample data (local development)
+
+If `/api/rides/` is empty, seed sample Users, Rides, and RideEvents:
+
+```bash
+docker compose exec web python manage.py seed_data
+```
+
+Options:
+- `--rides 50`
+- `--events-per-ride 6`
+- `--force` (adds more data even if rides already exist)
+
+Seeded users have password:
+- `password`
+
+Seeded test emails (by default):
+- Riders: `rider1@example.com` ... `rider10@example.com`
+- Drivers: `driver1@example.com` ... `driver5@example.com`
+
 ## 4) Troubleshooting
 
 ### Database not ready when running migrations

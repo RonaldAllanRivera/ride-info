@@ -30,6 +30,8 @@ Status: Completed.
   - Use `select_related` for `id_driver`/`id_rider` and a filtered `Prefetch` for `todays_ride_events`.
   - Keep list retrieval to ~2 queries (+1 for count when paginating).
 
+Status: Completed.
+
 ## Phase 4 — Quality, developer experience, and delivery
 - Add seed data helper (management command) for fast local testing.
 - Add request/response examples and query parameter documentation.

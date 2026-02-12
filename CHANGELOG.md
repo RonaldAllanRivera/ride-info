@@ -12,3 +12,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Added custom Django auth `User` model (email login + role).
 - Added `Ride` and `RideEvent` models.
 - Added admin-only JWT token endpoint and protected CRUD endpoints.
+- Implemented optimized Ride List API (pagination, filtering, sorting by pickup time and distance-to-pickup).
+- Added `todays_ride_events` (last 24 hours only) via filtered prefetch for performance.
+- Enabled Postgres `cube` + `earthdistance` extensions and added supporting indexes.
+- Added `seed_data` management command for generating sample users, rides, and ride events.

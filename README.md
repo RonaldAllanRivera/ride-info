@@ -59,6 +59,13 @@ The ride list endpoint supports:
   - `pickup_time`
   - distance-to-pickup using a provided GPS position
 
+Request parameters (list endpoint):
+- `status`: filter by ride status
+- `rider_email`: filter by rider email
+- `ordering`: `pickup_time`, `-pickup_time`, `distance`, `-distance`
+- `lat` + `lon`: required when ordering by distance
+- `page`, `page_size`: pagination
+
 ### Performance: `todays_ride_events`
 Ride list responses include `todays_ride_events`, containing only RideEvents from the last 24 hours.
 
@@ -74,3 +81,5 @@ A raw SQL statement that counts trips that took more than 1 hour (pickup -> drop
 ## Testing
 
 See `TEST.md` for step-by-step Docker and Postman testing.
+
+To populate sample data locally: `docker compose exec web python manage.py seed_data` (seeded users use password `password`)
