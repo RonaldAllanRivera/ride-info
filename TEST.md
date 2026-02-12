@@ -105,6 +105,8 @@ Sort by distance to pickup (requires GPS input):
 - `GET http://localhost:8000/api/rides/?ordering=distance&lat=14.5995&lon=120.9842`
 - `GET http://localhost:8000/api/rides/?ordering=-distance&lat=14.5995&lon=120.9842`
 
+If `DJANGO_DEBUG=true`, check the response header `X-Query-Count` to verify query efficiency.
+
 ## 5) Seed sample data (local development)
 
 If `/api/rides/` is empty, seed sample Users, Rides, and RideEvents:
@@ -124,6 +126,64 @@ Seeded users have password:
 Seeded test emails (by default):
 - Riders: `rider1@example.com` ... `rider10@example.com`
 - Drivers: `driver1@example.com` ... `driver5@example.com`
+
+## 6) Bonus SQL (run in Postgres)
+
+Open a psql shell in the database container:
+
+```bash
+docker compose exec db psql -U ride_info -d ride_info
+```
+
+Run the bonus SQL query from `README.md`.
+
+### How to test the Bonus SQL (step-by-step)
+
+1) Ensure there is at least one ride with events spanning > 1 hour:
+
+```bash
+docker compose exec web python manage.py seed_data --force --rides 1 --events-per-ride 1
+```
+
+2) Open a Postgres shell:
+
+```bash
+docker compose exec db psql -U ride_info -d ride_info
+```
+
+3) Paste the Bonus SQL from `README.md` and execute it (make sure it ends with `;`).
+
+Expected:
+- At least one row with columns `month`, `driver`, and `trips_over_1h`.
+
+4) If you get 0 rows, run this diagnostic query to find the longest rides:
+
+```sql
+SELECT
+  r.id_ride,
+  r.id_driver AS driver_id,
+  MIN(e.created_at) FILTER (WHERE e.description = 'Status changed to pickup') AS pickup_at,
+  MAX(e.created_at) FILTER (WHERE e.description = 'Status changed to dropoff') AS dropoff_at,
+  (MAX(e.created_at) FILTER (WHERE e.description = 'Status changed to dropoff')
+    - MIN(e.created_at) FILTER (WHERE e.description = 'Status changed to pickup')) AS duration
+FROM rides_ride r
+JOIN rides_rideevent e ON e.id_ride = r.id_ride
+GROUP BY r.id_ride, r.id_driver
+HAVING MIN(e.created_at) FILTER (WHERE e.description = 'Status changed to pickup') IS NOT NULL
+   AND MAX(e.created_at) FILTER (WHERE e.description = 'Status changed to dropoff') IS NOT NULL
+ORDER BY duration DESC
+LIMIT 10;
+```
+
+Exit psql:
+
+```sql
+\q
+```
+
+Notes:
+- The included `seed_data` command ensures at least one ride has events spanning > 1 hour so the query returns rows.
+- If you seeded before this behavior was added, re-run: `docker compose exec web python manage.py seed_data --force`
 
 ## 4) Troubleshooting
 

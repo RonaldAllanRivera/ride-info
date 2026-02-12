@@ -37,4 +37,10 @@ Status: Completed.
 - Add request/response examples and query parameter documentation.
 - Add a short performance note: indexing suggestions + how query-count is minimized.
 - Add the bonus raw SQL statement to the README.
+
+Status: Completed.
+
+## Phase 5
 - Final pass on commit history and a 5-minute walkthrough script.
+
+Status: Pending.

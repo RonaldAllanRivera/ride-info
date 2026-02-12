@@ -95,6 +95,8 @@ class Command(BaseCommand):
             dropoff_lon = center_lon + rng.uniform(-0.06, 0.06)
 
             pickup_time = now - timedelta(hours=rng.uniform(0, 72))
+            if i == 0:
+                pickup_time = now - timedelta(hours=6)
             status = rng.choice(statuses)
 
             ride = Ride.objects.create(
@@ -110,12 +112,35 @@ class Command(BaseCommand):
             created_rides.append(ride)
 
             # Ensure at least one event within last 24 hours to exercise `todays_ride_events`.
-            RideEvent.objects.create(
-                id_ride=ride,
-                description="Status changed to pickup",
-                created_at=now - timedelta(hours=rng.uniform(0.1, 20)),
-            )
-            created_events += 1
+            if i == 0:
+                pickup_event_at = pickup_time + timedelta(minutes=1)
+                dropoff_event_at = pickup_time + timedelta(hours=2, minutes=5)
+
+                if pickup_event_at > now:
+                    pickup_event_at = now - timedelta(minutes=10)
+                if dropoff_event_at > now:
+                    dropoff_event_at = now - timedelta(minutes=1)
+
+                RideEvent.objects.create(
+                    id_ride=ride,
+                    description="Status changed to pickup",
+                    created_at=pickup_event_at,
+                )
+                created_events += 1
+
+                RideEvent.objects.create(
+                    id_ride=ride,
+                    description="Status changed to dropoff",
+                    created_at=dropoff_event_at,
+                )
+                created_events += 1
+            else:
+                RideEvent.objects.create(
+                    id_ride=ride,
+                    description="Status changed to pickup",
+                    created_at=now - timedelta(hours=rng.uniform(0.1, 20)),
+                )
+                created_events += 1
 
             for _ in range(max(events_per_ride - 1, 0)):
                 age_hours = rng.uniform(0, 120)

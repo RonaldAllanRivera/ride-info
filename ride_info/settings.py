@@ -37,6 +37,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "ride_info.middleware.QueryCountMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
